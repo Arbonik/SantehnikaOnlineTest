@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.arbonik.santehnikaonlinetest.MapFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_placeFragment"
+            app:destination="@id/placeFragment" />
+        <argument
+            android:name="lat"
+            app:argType="float" />
+        <argument
+            android:name="lon"
+            app:argType="float" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/placeFragment"
+        android:name="com.arbonik.santehnikaonlinetest.PlaceFragment"
+        android:label="fragment_place"
+        tools:layout="@layout/fragment_place">
+        <argument
+            android:name="data"
+            app:argType="com.arbonik.santehnikaonlinetest.ShortData" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.arbonik.santehnikaonlinetest.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start">
+        <action
+            android:id="@+id/action_startFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+</navigation>

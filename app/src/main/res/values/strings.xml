@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SantehnikaOnlineTest</string>
+    <string name="to">Перейти</string>
+    <string name="address">Адресс:</string>
+    <string name="lanTitle">Широта:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="to_map_button">Перейти к карте</string>
+</resources>
