@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.navArgs
-import com.arbonik.santehnikaonlinetest.utils.Resource
 import com.arbonik.santehnikaonlinetest.data.GeoData
 import com.arbonik.santehnikaonlinetest.databinding.FragmentMainBinding
+import com.arbonik.santehnikaonlinetest.utils.Resource
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -24,7 +24,7 @@ class MapFragment : Fragment() {
     private val viewModel: MapViewModel by viewModels()
     private lateinit var binding: FragmentMainBinding
     private lateinit var mapView: MapView
-    private val args: com.arbonik.santehnikaonlinetest.MapFragmentArgs by navArgs()
+    private val args: MapFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

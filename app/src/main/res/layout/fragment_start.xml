@@ -4,8 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.StartFragment">
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <Button
+        android:layout_margin="@dimen/margin"
         android:id="@+id/toMapButton"
         android:layout_gravity="center"
         android:layout_width="match_parent"
