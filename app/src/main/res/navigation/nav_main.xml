@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.arbonik.santehnikaonlinetest.ui.StartFragment"
+        android:name="com.arbonik.santehnikaonlinetest.ui.start.StartFragment"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start">
 

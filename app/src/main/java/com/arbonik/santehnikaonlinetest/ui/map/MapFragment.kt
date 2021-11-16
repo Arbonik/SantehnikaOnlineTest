@@ -44,15 +44,14 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Point(args.lat.toDouble(), args.lon.toDouble()).let { point ->
-            mapView.map.move(
-                CameraPosition(
-                    point, 11f, 0f, 0f
-                ),
-                Animation(Animation.Type.SMOOTH, 0f),
-                null
-            )
-        }
+        val point = Point(args.lat.toDouble(), args.lon.toDouble())
+        mapView.map.move(
+            CameraPosition(
+                point, 11f, 0f, 0f
+            ),
+            Animation(Animation.Type.SMOOTH, 0f),
+            null
+        )
 
         mapView.map.addInputListener(viewModel.mapListener)
 
@@ -68,6 +67,7 @@ class MapFragment : Fragment() {
                         it.data?.let { shortData ->
                             binding.progressBar.visibility = View.GONE
                             showBottomSheet(shortData)
+                            viewModel.clearSearch()
                         }
                     }
                 }
@@ -81,7 +81,6 @@ class MapFragment : Fragment() {
             (fragment as ModalBottomSheet).dismiss()
         }
         modalBottomSheet.show(parentFragmentManager, ModalBottomSheet.TAG)
-        viewModel.clearSearch()
     }
 
     override fun onStop() {

@@ -1,11 +1,9 @@
-package com.arbonik.santehnikaonlinetest.ui
+package com.arbonik.santehnikaonlinetest.ui.start
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
@@ -14,10 +12,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.arbonik.santehnikaonlinetest.R
 import com.arbonik.santehnikaonlinetest.databinding.FragmentStartBinding
+import com.arbonik.santehnikaonlinetest.utils.Resource
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
 
 
 class StartFragment : Fragment() {
@@ -26,7 +28,9 @@ class StartFragment : Fragment() {
     private val locationManager by lazy {
         requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
+    private val viewModel: StartViewModel by viewModels()
     private lateinit var binding: FragmentStartBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,11 +44,44 @@ class StartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toMapButton.setOnClickListener {
-            checkGPSPermissions()
+            checkLocationPermissions()
+        }
+        lifecycle.coroutineScope.launchWhenStarted {
+            viewModel.tapRequestState.collectLatest {
+                when (it) {
+                    is Resource.Error -> {}
+                    is Resource.Loading -> {
+                        binding.toMapButton.visibility = View.GONE
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is Resource.Success -> {
+                        binding.toMapButton.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.GONE
+                        navigateToMapFragment(it.data!!)
+                        viewModel.clearSearch()
+                    }
+                }
+            }
         }
     }
 
-    private fun checkGPSPermissions() {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == PERMISSION_CODE &&
+            grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+        ) {
+            checkLocationPermissions()
+        } else {
+            Snackbar.make(requireView(), getString(R.string.no_geo_position), Snackbar.LENGTH_LONG)
+                .show()
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun checkLocationPermissions() {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
             locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         )
@@ -66,31 +103,11 @@ class StartFragment : Fragment() {
                     PERMISSION_CODE
                 )
             } else {
-                findPosition()
+                viewModel.startSearch()
             } else {
             Snackbar.make(requireView(), getString(R.string.gps_off), Snackbar.LENGTH_LONG)
                 .show()
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == PERMISSION_CODE &&
-            grantResults.all { it == PackageManager.PERMISSION_GRANTED }
-        ) {
-            checkGPSPermissions()
-        } else {
-            Snackbar.make(requireView(), getString(R.string.no_geo_position), Snackbar.LENGTH_LONG)
-                .show()
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    private val listener = LocationListener {
-        navigateToMapFragment(it)
     }
 
     private fun navigateToMapFragment(it: Location) {
@@ -100,37 +117,5 @@ class StartFragment : Fragment() {
                 it.longitude.toFloat(),
             )
         )
-        binding.toMapButton.visibility = View.VISIBLE
-        binding.progressBar.visibility = View.GONE
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun findPosition() {
-        val lastPositionNetwork =
-            locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        val lastPositionGPS =
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-        if (lastPositionNetwork == null && lastPositionGPS == null) {
-            binding.toMapButton.visibility = View.GONE
-            binding.progressBar.visibility = View.VISIBLE
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, listener)
-            locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER,
-                0,
-                0f,
-                listener
-            )
-        } else {
-            val point = lastPositionNetwork ?: lastPositionGPS
-            point?.let {
-                navigateToMapFragment(it)
-            }
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        locationManager.removeUpdates(listener)
     }
 }
