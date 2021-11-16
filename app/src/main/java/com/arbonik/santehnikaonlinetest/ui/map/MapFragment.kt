@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.navArgs
+import com.arbonik.santehnikaonlinetest.R
 import com.arbonik.santehnikaonlinetest.data.GeoData
 import com.arbonik.santehnikaonlinetest.databinding.FragmentMainBinding
 import com.arbonik.santehnikaonlinetest.utils.Resource
@@ -16,6 +17,7 @@ import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.mapview.MapView
+import com.yandex.runtime.image.ImageProvider
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -66,6 +68,10 @@ class MapFragment : Fragment() {
                     is Resource.Success -> {
                         it.data?.let { shortData ->
                             binding.progressBar.visibility = View.GONE
+                            mapView.map.mapObjects.clear()
+                            mapView.map.mapObjects.addPlacemark(
+                                Point(shortData.lat, shortData.lon)
+                            )
                             showBottomSheet(shortData)
                             viewModel.clearSearch()
                         }
