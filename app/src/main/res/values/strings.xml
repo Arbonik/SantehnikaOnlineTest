@@ -3,6 +3,6 @@
     <string name="to">Перейти</string>
     <string name="address">Адресс:</string>
     <string name="lanTitle">Широта:</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="lonTitle">Долгота:</string>
     <string name="to_map_button">Перейти к карте</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.arbonik.santehnikaonlinetest
+package com.arbonik.santehnikaonlinetest.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -11,6 +11,7 @@ import android.widget.Button
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.arbonik.santehnikaonlinetest.R
 import com.arbonik.santehnikaonlinetest.databinding.FragmentStartBinding
 
 

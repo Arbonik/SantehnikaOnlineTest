@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.arbonik.santehnikaonlinetest.MapFragment"
+        android:name="com.arbonik.santehnikaonlinetest.ui.map.MapFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
         <action
@@ -23,16 +23,17 @@
     </fragment>
     <fragment
         android:id="@+id/placeFragment"
-        android:name="com.arbonik.santehnikaonlinetest.PlaceFragment"
+        android:name="com.arbonik.santehnikaonlinetest.ui.PlaceFragment"
         android:label="fragment_place"
         tools:layout="@layout/fragment_place">
+
         <argument
             android:name="data"
-            app:argType="com.arbonik.santehnikaonlinetest.ShortData" />
+            app:argType="com.arbonik.santehnikaonlinetest.data.GeoData" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.arbonik.santehnikaonlinetest.StartFragment"
+        android:name="com.arbonik.santehnikaonlinetest.ui.StartFragment"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start">
         <action
